@@ -2,13 +2,13 @@ const express = require("express");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 
-const { appRouter } = require("./routes/app.router");
+const { api } = require("./routes/api");
 
 const app = express();
 
 app.use(morgan("combined"));
 app.use(bodyParser.json());
 
-app.use(appRouter);
+app.use("/v1", api);
 
 module.exports = app;
