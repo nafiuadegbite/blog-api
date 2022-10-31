@@ -10,7 +10,7 @@ const getAllArticles = async (skip, limit) => {
         __v: 0,
       }
     )
-    .sort({ flightNumber: 1 })
+    .sort({ _id: 1 })
     .skip(skip)
     .limit(limit);
 };

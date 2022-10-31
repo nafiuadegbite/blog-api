@@ -1,4 +1,5 @@
 const express = require("express");
+const { protect } = require("../../middleware/auth");
 const {
   httpCreateArticle,
   httpGetAllArticles,
@@ -7,6 +8,6 @@ const {
 const blogRouter = express.Router();
 
 blogRouter.get("/", httpGetAllArticles);
-blogRouter.post("/", httpCreateArticle);
+blogRouter.post("/", protect, httpCreateArticle);
 
 module.exports = { blogRouter };

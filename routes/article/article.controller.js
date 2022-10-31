@@ -1,7 +1,7 @@
 const {
   createNewArticle,
   getAllArticles,
-} = require("../../models/articles.model");
+} = require("../../models/articles/articles.model");
 const getPagination = require("../../services/query");
 
 const httpGetAllArticles = async (req, res) => {
