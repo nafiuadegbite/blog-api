@@ -17,29 +17,22 @@ const getAllUsers = async (skip, limit) => {
     .limit(limit);
 };
 
+const getUserById = async (id) => {
+  return await userDatabase
+    .findById(id, { password: 0, __v: 0 })
+    .populate("articles", { title: 1, _id: 0 });
+};
+
 const findProperty = async (filter) => {
   const result = await userDatabase.findOne(filter);
 
   return result;
 };
 
-const getSignedJwtToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRE,
+const addArticle = async (id, update) => {
+  return await userDatabase.findByIdAndUpdate(id, {
+    $push: { articles: [update] },
   });
-};
-
-const sendTokenResponse = (id, statusCode, res) => {
-  const token = getSignedJwtToken(id);
-
-  const options = {
-    expires: new Date(Date.now() + 3600 * 1000),
-    httpOnly: true,
-  };
-  res
-    .status(statusCode)
-    .cookie("token", token, options)
-    .json({ success: "true", token });
 };
 
 const isValidPassword = async (enteredPassword, comparePassword) => {
@@ -85,7 +78,7 @@ module.exports = {
   getAllUsers,
   createNewUser,
   findProperty,
-  getSignedJwtToken,
   isValidPassword,
-  sendTokenResponse,
+  getUserById,
+  addArticle,
 };

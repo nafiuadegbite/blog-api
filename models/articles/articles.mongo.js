@@ -15,7 +15,7 @@ const articlesSchema = new Schema(
       type: String,
     },
     author: {
-      type: Schema.Types.ObjectId,
+      type: Number,
       ref: "User",
     },
     state: {
@@ -25,6 +25,7 @@ const articlesSchema = new Schema(
     },
     read_count: {
       type: Number,
+      default: 0,
     },
     reading_time: {
       type: Number,

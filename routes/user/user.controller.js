@@ -1,20 +1,37 @@
 const { use } = require("passport");
+const { sendTokenResponse } = require("../../middleware/auth");
 const {
   getAllUsers,
   createNewUser,
   findProperty,
-  getSignedJwtToken,
   isValidPassword,
-  sendTokenResponse,
+  getUserById,
 } = require("../../models/users/user.model");
 const getPagination = require("../../services/query");
-const errorHandler = require("../../utils/errorResponse");
 
 const httpGetAllUsers = async (req, res) => {
   const { skip, limit } = getPagination(req.query);
   const users = await getAllUsers(skip, limit);
 
   res.status(200).json(users);
+};
+
+const httpGetUserbyId = async (req, res) => {
+  const { id } = req.params;
+
+  if (!id) {
+    return res.status(400).json({
+      error: "Please enter an id",
+    });
+  }
+
+  const user = await getUserById(id);
+
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  return res.status(200).json({ data: user });
 };
 
 const httpCreateUser = async (req, res, next) => {
@@ -61,13 +78,13 @@ const httpLogin = async (req, res, next) => {
     const user = await findProperty({ email });
 
     if (!user) {
-      res.status(401).json({ message: "Invalid Credentials" });
+      return res.status(401).json({ message: "Invalid Credentials" });
     }
 
     const isValid = await isValidPassword(password, user.password);
 
     if (!isValid) {
-      res.status(401).json({ message: "Invalid Credentials" });
+      return res.status(401).json({ message: "Invalid Credentials" });
     }
 
     sendTokenResponse(user._id, 200, res);
@@ -76,4 +93,10 @@ const httpLogin = async (req, res, next) => {
   }
 };
 
-module.exports = { httpGetAllUsers, httpCreateUser, findUser, httpLogin };
+module.exports = {
+  httpGetAllUsers,
+  httpGetUserbyId,
+  httpCreateUser,
+  findUser,
+  httpLogin,
+};

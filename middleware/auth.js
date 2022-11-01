@@ -29,4 +29,23 @@ const protect = async (req, res, next) => {
   }
 };
 
-module.exports = { protect };
+const getSignedJwtToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRE,
+  });
+};
+
+const sendTokenResponse = (id, statusCode, res) => {
+  const token = getSignedJwtToken(id);
+
+  const options = {
+    expires: new Date(Date.now() + 3600 * 1000),
+    httpOnly: true,
+  };
+  res
+    .status(statusCode)
+    .cookie("token", token, options)
+    .json({ success: "true", token });
+};
+
+module.exports = { protect, sendTokenResponse, getSignedJwtToken };

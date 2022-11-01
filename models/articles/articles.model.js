@@ -10,9 +10,24 @@ const getAllArticles = async (skip, limit) => {
         __v: 0,
       }
     )
+    .populate("author", { _id: 0, first_name: 1, last_name: 1 })
     .sort({ _id: 1 })
     .skip(skip)
     .limit(limit);
+};
+
+const getArticleById = async (id) => {
+  return await articleDatabase
+    .findByIdAndUpdate(
+      id,
+      {
+        $inc: { read_count: 1 },
+      },
+      {
+        __v: 0,
+      }
+    )
+    .populate("author", { _id: 0, first_name: 1, last_name: 1 });
 };
 
 const saveArticle = async (article) => {
@@ -37,6 +52,16 @@ const getArticleId = async () => {
   return latestArticle._id;
 };
 
+const findArticle = async (filter) => {
+  const result = await articleDatabase.findOne(filter);
+
+  return result;
+};
+
+const updateArticleToPublished = async (id) => {
+  return await articleDatabase.findByIdAndUpdate(id, { state: "published" });
+};
+
 const createNewArticle = async (article) => {
   const newId = (await getArticleId()) + 1;
 
@@ -47,4 +72,10 @@ const createNewArticle = async (article) => {
   await saveArticle(newArticle);
 };
 
-module.exports = { getAllArticles, createNewArticle };
+module.exports = {
+  getAllArticles,
+  createNewArticle,
+  getArticleById,
+  findArticle,
+  updateArticleToPublished,
+};
