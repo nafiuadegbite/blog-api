@@ -7,6 +7,7 @@ const getPagination = (query) => {
   const skip = (page - 1) * limit;
 
   return {
+    page,
     skip,
     limit,
   };

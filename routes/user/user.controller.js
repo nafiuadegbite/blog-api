@@ -2,7 +2,7 @@ const { use } = require("passport");
 const { sendTokenResponse } = require("../../middleware/auth");
 const {
   getAllUsers,
-  createNewUser,
+  register,
   findProperty,
   isValidPassword,
   getUserById,
@@ -16,25 +16,14 @@ const httpGetAllUsers = async (req, res) => {
   res.status(200).json(users);
 };
 
-const httpGetUserbyId = async (req, res) => {
-  const { id } = req.params;
+const httpProfile = async (req, res) => {
 
-  if (!id) {
-    return res.status(400).json({
-      error: "Please enter an id",
-    });
-  }
+  const user = await getUserById(req.user.id);
 
-  const user = await getUserById(id);
-
-  if (!user) {
-    return res.status(404).json({ message: "User not found" });
-  }
-
-  return res.status(200).json({ data: user });
+  return res.status(200).json(user);
 };
 
-const httpCreateUser = async (req, res, next) => {
+const httpRegister = async (req, res) => {
   try {
     const user = req.body;
 
@@ -50,7 +39,7 @@ const httpCreateUser = async (req, res, next) => {
       return res.status(404).json({ message: "User already exists" });
     }
 
-    await createNewUser(user);
+    await register(user);
     sendTokenResponse(user._id, 200, res);
   } catch (error) {
     console.log(error);
@@ -93,10 +82,11 @@ const httpLogin = async (req, res, next) => {
   }
 };
 
+
 module.exports = {
   httpGetAllUsers,
-  httpGetUserbyId,
-  httpCreateUser,
+  httpProfile,
+  httpRegister,
   findUser,
   httpLogin,
 };

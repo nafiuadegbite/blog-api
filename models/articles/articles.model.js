@@ -16,6 +16,22 @@ const getAllArticles = async (skip, limit) => {
     .limit(limit);
 };
 
+const getPublishedArticles = async () => {
+  return await articleDatabase.count({ state: { $in: "published" } });
+};
+
+const getTotalArticleList = async (filter) => {
+  return await articleDatabase.count({ $or: filter });
+};
+
+const getArticleList = async (filter, state, skip, limit) => {
+  return await articleDatabase
+    .find({ $or: filter, $and: [state] })
+    .sort({ _id: 1 })
+    .skip(skip)
+    .limit(limit);
+};
+
 const getArticleById = async (id) => {
   return await articleDatabase
     .findByIdAndUpdate(
@@ -58,8 +74,12 @@ const findArticle = async (filter) => {
   return result;
 };
 
-const updateArticleToPublished = async (id) => {
-  return await articleDatabase.findByIdAndUpdate(id, { state: "published" });
+const updateArticle = async (id, update) => {
+  return await articleDatabase.findByIdAndUpdate(id, update);
+};
+
+const deleteArticle = async (id) => {
+  return await articleDatabase.findByIdAndDelete(id);
 };
 
 const createNewArticle = async (article) => {
@@ -77,5 +97,9 @@ module.exports = {
   createNewArticle,
   getArticleById,
   findArticle,
-  updateArticleToPublished,
+  updateArticle,
+  deleteArticle,
+  getArticleList,
+  getPublishedArticles,
+  getTotalArticleList,
 };

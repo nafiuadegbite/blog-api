@@ -28,7 +28,7 @@ const articlesSchema = new Schema(
       default: 0,
     },
     reading_time: {
-      type: Number,
+      type: String,
     },
     tags: [
       {

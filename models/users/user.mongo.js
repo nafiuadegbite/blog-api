@@ -1,5 +1,5 @@
 const { Schema, model } = require("mongoose");
-const jwt = require("jsonwebtoken");
+const mongoosePaginate = require('mongoose-paginate');
 
 const UserSchema = new Schema({
   _id: {
@@ -40,4 +40,5 @@ const UserSchema = new Schema({
 });
 
 
+UserSchema.plugin(mongoosePaginate);
 module.exports = new model("User", UserSchema);

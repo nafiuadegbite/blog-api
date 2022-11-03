@@ -19,8 +19,11 @@ const getAllUsers = async (skip, limit) => {
 
 const getUserById = async (id) => {
   return await userDatabase
-    .findById(id, { password: 0, __v: 0 })
-    .populate("articles", { title: 1, _id: 0 });
+    .findById(id, { first_name: 1, last_name: 1 })
+    .populate("articles", { title: 1, body: 1 })
+    .limit(3 * 1)
+    .skip((1 - 1) * 3)
+    .exec();
 };
 
 const findProperty = async (filter) => {
@@ -33,6 +36,13 @@ const addArticle = async (id, update) => {
   return await userDatabase.findByIdAndUpdate(id, {
     $push: { articles: [update] },
   });
+};
+
+const deleteArticleFromAuthor = async (id, update) => {
+  return await userDatabase.updateOne(
+    { _id: id },
+    { $pull: { articles: update } }
+  );
 };
 
 const isValidPassword = async (enteredPassword, comparePassword) => {
@@ -62,7 +72,7 @@ const getUserId = async () => {
   return latestUser._id;
 };
 
-const createNewUser = async (user) => {
+const register = async (user) => {
   const newId = (await getUserId()) + 1;
   const newPassword = await hashPassword(user.password);
 
@@ -76,9 +86,10 @@ const createNewUser = async (user) => {
 
 module.exports = {
   getAllUsers,
-  createNewUser,
+  register,
   findProperty,
   isValidPassword,
   getUserById,
   addArticle,
+  deleteArticleFromAuthor,
 };

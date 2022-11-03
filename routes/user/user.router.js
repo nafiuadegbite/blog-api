@@ -1,18 +1,18 @@
 const express = require("express");
+const { protect } = require("../../middleware/auth");
 const {
   httpGetAllUsers,
-  httpCreateUser,
-  findUser,
   httpLogin,
-  httpGetUserbyId,
+  httpProfile,
+  httpRegister,
 } = require("./user.controller");
 
 const userRouter = express.Router();
 
 userRouter
   .get("/", httpGetAllUsers)
-  .get("/:id", httpGetUserbyId)
-  .post("/signup", httpCreateUser)
+  .get("/profile", protect, httpProfile)
+  .post("/signup", httpRegister)
   .post("/login", httpLogin);
 
 module.exports = { userRouter };
