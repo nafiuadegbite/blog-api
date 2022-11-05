@@ -76,7 +76,7 @@ const httpRegister = async (req, res) => {
     await register(user);
 
     // Send token
-    sendTokenResponse(user._id, 200, res);
+    sendTokenResponse(user._id, 201, res);
   } catch (error) {
     res.status(400).json({ message: "Bad Request" });
   }

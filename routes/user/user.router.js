@@ -11,7 +11,6 @@ const {
 const userRouter = express.Router();
 
 userRouter
-  .get("/", httpGetAllUsers)
   .get("/profile", protect, httpProfile)
   .get("/logout", httpLogout)
   .post("/register", httpRegister)

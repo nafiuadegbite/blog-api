@@ -58,12 +58,6 @@ const httpGetArticleById = async (req, res) => {
   try {
     const { id } = req.params;
 
-    if (!id) {
-      return res.status(400).json({
-        error: "Please enter an id",
-      });
-    }
-
     const article = await getArticleById(id);
 
     // Check if Article Exist and Published
@@ -95,7 +89,7 @@ const httpGetArticleList = async (req, res) => {
 
     // Check if User have article
     if (articleArray.length === 0) {
-      return res.status(200).json({ message: "No Articles found" });
+      return res.status(404).json({ message: "No Articles found" });
     }
 
     const articleList = await getArticleList(
@@ -171,9 +165,9 @@ const httpUpdateArticle = async (req, res) => {
     const { id } = req.params;
     const update = req.body;
 
-    if (!id) {
+    if (Object.entries(update).length === 0) {
       return res.status(400).json({
-        error: "Please enter an id",
+        error: "Please enter an update value",
       });
     }
 
@@ -210,12 +204,6 @@ const httpUpdateArticle = async (req, res) => {
 const httpDeleteArticle = async (req, res) => {
   try {
     const { id } = req.params;
-
-    if (!id) {
-      return res.status(400).json({
-        error: "Please enter an id",
-      });
-    }
 
     let article = await getArticleById(id);
 
