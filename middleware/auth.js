@@ -75,14 +75,6 @@ const isValidPassword = async (enteredPassword, comparePassword) => {
   return await bcrypt.compare(enteredPassword, comparePassword);
 };
 
-// ===================== Validate Email =====================
-
-const validateEmail = (email) => {
-  const res =
-    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return res.test(String(email).toLowerCase());
-};
-
 // ==================== Export All Functions ================
 
 module.exports = {
@@ -91,7 +83,6 @@ module.exports = {
   getSignedJwtToken,
   hashPassword,
   isValidPassword,
-  validateEmail,
 };
 
 // ===========================================================

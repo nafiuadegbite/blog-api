@@ -11,11 +11,6 @@ describe("Article Route Test", () => {
     await mongoDisconnect();
   });
 
-  const invalidUser = {
-    email: "john@gmail.com",
-    password: "192891",
-  };
-
   const userWithArticle = {
     email: "ade@gmail.com",
     password: "123456",

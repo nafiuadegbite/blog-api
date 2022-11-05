@@ -1,17 +1,15 @@
 // ================================= User Controller ================================
 
-const {
-  sendTokenResponse,
-  isValidPassword,
-  validateEmail,
-} = require("../../middleware/auth");
+const { sendTokenResponse, isValidPassword } = require("../../middleware/auth");
 const {
   getAllUsers,
   register,
   findUser,
   getUserById,
+  updateUser,
 } = require("../../models/users/user.model");
 const getPagination = require("../../services/query");
+const validateEmail = require("../../utils/validateEmail");
 
 // ================================= GET All Users ==================================
 
@@ -40,6 +38,7 @@ const httpProfile = async (req, res) => {
 
     return res.status(200).json(user);
   } catch (error) {
+    console.log(error);
     res.status(400).json({ message: "Bad Request" });
   }
 };
@@ -61,7 +60,7 @@ const httpRegister = async (req, res) => {
     }
 
     // Validate email
-    if (!validateEmail(email)) {
+    if (!validateEmail(user.email)) {
       return res.status(400).json({ message: "Enter a valid email address" });
     }
 
@@ -124,6 +123,28 @@ const httpLogin = async (req, res) => {
   }
 };
 
+// ============================= Update User's Detail ===============================
+
+// @desc      Update Article
+// @route     PUT /api/v1/user/updatedetails
+// @access    Private
+const httpUpdateUser = async (req, res) => {
+  try {
+    const update = req.body;
+
+    if (Object.entries(update).length === 0) {
+      return res.status(400).json({
+        error: "Please enter an update value",
+      });
+    }
+
+    await updateUser(req.user.id, update);
+    return res.status(201).json({ message: "Details updated successfully" });
+  } catch (error) {
+    res.status(400).json({ message: "Bad Request" });
+  }
+};
+
 // ==================================== Logout ======================================
 
 // @desc      Logout
@@ -146,6 +167,7 @@ module.exports = {
   httpProfile,
   httpRegister,
   httpLogin,
+  httpUpdateUser,
   httpLogout,
 };
 

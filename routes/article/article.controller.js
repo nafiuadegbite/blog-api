@@ -157,7 +157,7 @@ const httpCreateArticle = async (req, res) => {
 
 // ================================= Update Article ======================================
 
-// @desc      Create Article
+// @desc      Update Article
 // @route     PUT /api/v1/blog
 // @access    Private
 const httpUpdateArticle = async (req, res) => {

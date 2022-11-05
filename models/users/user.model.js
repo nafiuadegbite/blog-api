@@ -25,10 +25,8 @@ const getAllUsers = async (skip, limit) => {
 
 const getUserById = async (id) => {
   return await userDatabase
-    .findById(id, { first_name: 1, last_name: 1 })
-    .populate("articles", { title: 1, body: 1 })
-    .limit(limit)
-    .skip(skip);
+    .findById(id, { password: 0, __v: 0 })
+    .populate("articles", { title: 1, body: 1 });
 };
 
 // =========================== Find User ==============================
@@ -92,6 +90,12 @@ const register = async (user) => {
   await saveUser(newUser);
 };
 
+// ======================= Update User Details ========================
+
+const updateUser = async (id, update) => {
+  return await userDatabase.findByIdAndUpdate(id, update);
+};
+
 // ======================= Export All Functions =======================
 
 module.exports = {
@@ -101,6 +105,7 @@ module.exports = {
   getUserById,
   addArticle,
   deleteArticleFromAuthor,
+  updateUser
 };
 
 // ====================================================================

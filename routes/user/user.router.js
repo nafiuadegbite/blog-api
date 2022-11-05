@@ -6,6 +6,7 @@ const {
   httpProfile,
   httpRegister,
   httpLogout,
+  httpUpdateUser,
 } = require("./user.controller");
 
 const userRouter = express.Router();
@@ -14,6 +15,7 @@ userRouter
   .get("/profile", protect, httpProfile)
   .get("/logout", httpLogout)
   .post("/register", httpRegister)
-  .post("/login", httpLogin);
+  .post("/login", httpLogin)
+  .put("/updatedetails", protect, httpUpdateUser);
 
 module.exports = { userRouter };
