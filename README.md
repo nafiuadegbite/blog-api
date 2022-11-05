@@ -9,7 +9,6 @@
 - User Create, Read, Update and Delete (CRUD) operations
 - CRUD operations for blog post
 - Pagination and search where necessary
-- API Security (NoSQL Injections, XSS Attacks, http param pollution etc)
 
 ## API Documentation
 
