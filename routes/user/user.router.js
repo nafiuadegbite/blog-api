@@ -5,6 +5,7 @@ const {
   httpLogin,
   httpProfile,
   httpRegister,
+  httpLogout,
 } = require("./user.controller");
 
 const userRouter = express.Router();
@@ -12,7 +13,8 @@ const userRouter = express.Router();
 userRouter
   .get("/", httpGetAllUsers)
   .get("/profile", protect, httpProfile)
-  .post("/signup", httpRegister)
+  .get("/logout", httpLogout)
+  .post("/register", httpRegister)
   .post("/login", httpLogin);
 
 module.exports = { userRouter };

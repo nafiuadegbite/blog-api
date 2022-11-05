@@ -1,3 +1,5 @@
+// ================================= Article Controller ===============================
+
 const {
   createNewArticle,
   getArticleList,
@@ -13,187 +15,237 @@ const {
   addArticle,
   deleteArticleFromAuthor,
 } = require("../../models/users/user.model");
-const getPagination = require("../../services/query");
+const { getPagination, setPagination } = require("../../services/query");
 const { getReadingTime } = require("../../utils/readingTime");
 
+// ================================= GET All Published Articles =========================
+
+// @desc      Get Published Articles
+// @route     GET /api/v1/blog
+// @access    Public
 const httpGetAllArticles = async (req, res) => {
-  const { page, skip, limit } = getPagination(req.query);
+  try {
+    let query = req.query;
 
-  const articles = await getAllArticles(skip, limit);
+    // Destructuring GET request object
+    let { page, skip, limit, sort, endIndex, select } = getPagination(query);
 
-  const publishedArticles = articles.filter((article) => {
-    return article.state === "published";
-  });
+    let articles = await getAllArticles(query, skip, limit, sort);
 
-  const endIndex = page * limit;
-  const total = await getPublishedArticles();
+    // Filtering Published Articles
+    const publishedArticles = articles.filter((article) => {
+      return article.state === "published";
+    });
 
-  const pagination = {};
+    // Total Published Articles
+    const total = await getPublishedArticles();
 
-  if (endIndex < total) {
-    pagination.next = {
-      page: page + 1,
-      limit,
-    };
+    // Set Pagination's Object
+    const pagination = setPagination(skip, endIndex, total, page, limit);
+
+    res.status(200).json({ pagination, publishedArticles });
+  } catch (error) {
+    res.status(400).json({ message: "Bad Request" });
   }
-
-  if (skip > 0) {
-    pagination.prev = {
-      page: page - 1,
-      limit,
-    };
-  }
-
-  res.status(200).json({ pagination, publishedArticles });
 };
 
+// ================================= GET Articles By ID =================================
+
+// @desc      Get Published Articles
+// @route     GET /api/v1/blog/:id
+// @access    Public
 const httpGetArticleById = async (req, res) => {
-  const { id } = req.params;
+  try {
+    const { id } = req.params;
 
-  if (!id) {
-    return res.status(400).json({
-      error: "Please enter an id",
-    });
+    if (!id) {
+      return res.status(400).json({
+        error: "Please enter an id",
+      });
+    }
+
+    const article = await getArticleById(id);
+
+    // Check if Article Exist and Published
+    if (!article || article.state === "draft") {
+      return res.status(404).json({ message: "Article not found" });
+    }
+
+    return res.status(200).json(article);
+  } catch (error) {
+    res.status(400).json({ message: "Bad Request" });
   }
-
-  const article = await getArticleById(id);
-
-  if (!article || article.state === "draft") {
-    return res.status(404).json({ message: "Article not found" });
-  }
-
-  return res.status(200).json(article);
 };
 
-const httpCreateArticle = async (req, res) => {
-  req.body.author = Number(req.user.id);
+// ================================= GET Articles List Per User ==========================
 
-  let article = req.body;
-
-  if (!article.title || !article.body) {
-    return res.status(400).json({
-      error: "Missing required property",
-    });
-  }
-
-  const existArticle = await findArticle({ title: article.title });
-
-  if (existArticle) {
-    return res
-      .status(404)
-      .json({ message: "Article with title already exists" });
-  }
-
-  article.reading_time = getReadingTime(article.body);
-
-  await createNewArticle(article);
-
-  const articleFound = req.user.articles.find(
-    (element) => element === article._id
-  );
-
-  if (!articleFound) {
-    await addArticle(req.user.id, article._id);
-  }
-
-  return res.status(201).json(article);
-};
-
-const httpUpdateArticle = async (req, res) => {
-  const { id } = req.params;
-  const update = req.body;
-
-  if (!id) {
-    return res.status(400).json({
-      error: "Please enter an id",
-    });
-  }
-
-  let article = await getArticleById(id);
-
-  if (!article) {
-    return res.status(404).json({ message: "Article not found" });
-  }
-
-  const articleFound = req.user.articles.find(
-    (element) => element === article._id
-  );
-
-  if (!articleFound) {
-    return res.status(401).json({ message: "Unauthorized to update article" });
-  }
-
-  await updateArticle({ _id: articleFound }, update);
-  article = await getArticleById(id);
-  return res.status(200).json({ sucess: true, article });
-};
-
-const httpDeleteArticle = async (req, res) => {
-  const { id } = req.params;
-
-  if (!id) {
-    return res.status(400).json({
-      error: "Please enter an id",
-    });
-  }
-
-  let article = await getArticleById(id);
-
-  if (!article) {
-    return res.status(404).json({ message: "Article not found" });
-  }
-
-  const articleFound = req.user.articles.find(
-    (element) => element === article._id
-  );
-
-  if (!articleFound) {
-    return res.status(401).json({ message: "Unauthorized to delete article" });
-  }
-
-  await deleteArticleFromAuthor(req.user.id, articleFound);
-  await deleteArticle({ _id: articleFound });
-  return res.status(200).json({ message: "Article deleted successfully" });
-};
-
+// @desc      Get Articles List Per User
+// @route     GET /api/v1/blog/list
+// @access    Private
 const httpGetArticleList = async (req, res) => {
-  const { page, skip, limit } = getPagination(req.query);
+  try {
+    const query = req.query;
+    const { page, skip, limit, sort, endIndex, select } = getPagination(query);
 
-  const query = req.query;
+    // Get Article ID from User Schema
+    let articleArray = [];
+    req.user.articles.forEach((element) => {
+      articleArray.push(JSON.parse(`{"_id": ${element}}`));
+    });
 
-  let articleArray = [];
-  req.user.articles.forEach((element) => {
-    articleArray.push(JSON.parse(`{"_id": ${element}}`));
-  });
+    // Check if User have article
+    if (articleArray.length === 0) {
+      return res.status(200).json({ message: "No Articles found" });
+    }
 
-  if (articleArray.length === 0) {
-    return res.status(200).json({ message: "No Articles found" });
-  }
-
-  const articleList = await getArticleList(articleArray, query, skip, limit);
-
-  const endIndex = page * limit;
-  const total = await getTotalArticleList(articleArray);
-
-  
-  const pagination = {};
-
-  if (endIndex < total) {
-    pagination.next = {
-      page: page + 1,
+    const articleList = await getArticleList(
+      articleArray,
+      query,
+      skip,
       limit,
-    };
-  }
+      sort,
+      select
+    );
 
-  if (skip > 0) {
-    pagination.prev = {
-      page: page - 1,
-      limit,
-    };
-  }
+    // Get total number of Article
+    const total = await getTotalArticleList(articleArray);
 
-  return res.status(200).json({ pagination, articleList });
+    const pagination = setPagination(skip, endIndex, total, page, limit);
+
+    return res.status(200).json({ pagination, articleList });
+  } catch (error) {
+    res.status(400).json({ message: "Bad request" });
+  }
 };
+
+// ================================= Create Article ======================================
+
+// @desc      Create Article
+// @route     POST /api/v1/blog
+// @access    Private
+const httpCreateArticle = async (req, res) => {
+  try {
+    // Ref author ID to article for Article Schema
+    req.body.author = Number(req.user.id);
+
+    let article = req.body;
+
+    if (!article.title || !article.body) {
+      return res.status(400).json({
+        error: "Missing required property",
+      });
+    }
+
+    // Check If title exist
+    const existTitle = await findArticle({ title: article.title });
+
+    if (existTitle) {
+      return res
+        .status(409)
+        .json({ message: "Article with title already exists" });
+    }
+
+    // Set Article Reading Time and Author Name
+    article.reading_time = getReadingTime(article.body);
+    article.authorName = req.user.first_name;
+
+    // Save article to database
+    await createNewArticle(article);
+
+    // Ref Article ID to User Schema
+    await addArticle(req.user.id, article._id);
+
+    return res.status(201).json({ message: "Article Created", article });
+  } catch (error) {
+    res.status(400).json({ message: "Bad Request" });
+  }
+};
+
+// ================================= Update Article ======================================
+
+// @desc      Create Article
+// @route     PUT /api/v1/blog
+// @access    Private
+const httpUpdateArticle = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const update = req.body;
+
+    if (!id) {
+      return res.status(400).json({
+        error: "Please enter an id",
+      });
+    }
+
+    let article = await getArticleById(id);
+
+    // Check Article Exist
+    if (!article) {
+      return res.status(404).json({ message: "Article not found" });
+    }
+
+    // Check if particular user's article
+    const articleFound = req.user.articles.find(
+      (element) => element === article._id
+    );
+
+    if (!articleFound) {
+      return res
+        .status(401)
+        .json({ message: "Unauthorized to update article" });
+    }
+
+    await updateArticle({ _id: articleFound }, update);
+    return res.status(201).json({ message: "Article Updated" });
+  } catch (error) {
+    res.status(400).json({ message: "Bad Request" });
+  }
+};
+
+// ================================= Delete Article ======================================
+
+// @desc      Create Article
+// @route     DELETE /api/v1/blog
+// @access    Private
+const httpDeleteArticle = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({
+        error: "Please enter an id",
+      });
+    }
+
+    let article = await getArticleById(id);
+
+    if (!article) {
+      return res.status(404).json({ message: "Article not found" });
+    }
+
+    // Check if particular user's article
+    const articleFound = req.user.articles.find(
+      (element) => element === article._id
+    );
+
+    if (!articleFound) {
+      return res
+        .status(401)
+        .json({ message: "Unauthorized to delete article" });
+    }
+
+    // Delete Article ID from User's Schema
+    await deleteArticleFromAuthor(req.user.id, articleFound);
+
+    // Delete Article from Database
+    await deleteArticle({ _id: articleFound });
+    return res.status(200).json({ message: "Article deleted successfully" });
+  } catch (error) {
+    res.status(400).json({ message: "Bad Request" });
+  }
+};
+
+// ================================= Export All Functions ================================
 
 module.exports = {
   httpGetArticleList,
@@ -203,3 +255,5 @@ module.exports = {
   httpUpdateArticle,
   httpDeleteArticle,
 };
+
+//========================================================================================

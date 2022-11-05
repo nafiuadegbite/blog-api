@@ -1,4 +1,8 @@
+// ====================== Article Schema ====================
+
 const { Schema, model } = require("mongoose");
+
+// ==========================================================
 
 const articlesSchema = new Schema(
   {
@@ -12,6 +16,9 @@ const articlesSchema = new Schema(
       unique: true,
     },
     description: {
+      type: String,
+    },
+    authorName: {
       type: String,
     },
     author: {
@@ -48,4 +55,8 @@ const articlesSchema = new Schema(
   }
 );
 
+// ==========================================================
+
 module.exports = new model("Article", articlesSchema);
+
+// ==========================================================

@@ -1,6 +1,8 @@
-const { Schema, model } = require("mongoose");
-const mongoosePaginate = require('mongoose-paginate');
+// ====================== User Schema =====================
 
+const { Schema, model } = require("mongoose");
+
+// ========================================================
 const UserSchema = new Schema({
   _id: {
     type: Number,
@@ -17,10 +19,6 @@ const UserSchema = new Schema({
     type: String,
     required: true,
     unique: true,
-    match: [
-      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-      "Please add a valid email",
-    ],
   },
   password: {
     type: String,
@@ -39,6 +37,8 @@ const UserSchema = new Schema({
   },
 });
 
+// ========================================================
 
-UserSchema.plugin(mongoosePaginate);
 module.exports = new model("User", UserSchema);
+
+// ========================================================

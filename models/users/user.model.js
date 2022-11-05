@@ -1,8 +1,12 @@
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
+// ======================= User Database Model ========================
+
+const { hashPassword } = require("../../middleware/auth");
 const userDatabase = require("./user.mongo");
 
+// Default ID
 const DEFAULT_ID = 0;
+
+// ========================== GET All Users ===========================
 
 const getAllUsers = async (skip, limit) => {
   return await userDatabase
@@ -17,26 +21,31 @@ const getAllUsers = async (skip, limit) => {
     .limit(limit);
 };
 
+// ======================== GET Each User By ID =======================
+
 const getUserById = async (id) => {
   return await userDatabase
     .findById(id, { first_name: 1, last_name: 1 })
     .populate("articles", { title: 1, body: 1 })
-    .limit(3 * 1)
-    .skip((1 - 1) * 3)
-    .exec();
+    .limit(limit)
+    .skip(skip);
 };
 
-const findProperty = async (filter) => {
-  const result = await userDatabase.findOne(filter);
+// =========================== Find User ==============================
 
-  return result;
+const findUser = async (filter) => {
+  return await userDatabase.findOne(filter);
 };
+
+// ================= Add Created Article to Author ====================
 
 const addArticle = async (id, update) => {
   return await userDatabase.findByIdAndUpdate(id, {
     $push: { articles: [update] },
   });
 };
+
+// ===================== Delete Article to Author =====================
 
 const deleteArticleFromAuthor = async (id, update) => {
   return await userDatabase.updateOne(
@@ -45,9 +54,7 @@ const deleteArticleFromAuthor = async (id, update) => {
   );
 };
 
-const isValidPassword = async (enteredPassword, comparePassword) => {
-  return await bcrypt.compare(enteredPassword, comparePassword);
-};
+// ================ Save User's Detail to Database ====================
 
 const saveUser = async (user) => {
   await userDatabase.findOneAndUpdate({ _id: user._id }, user, {
@@ -55,12 +62,7 @@ const saveUser = async (user) => {
   });
 };
 
-const hashPassword = async (password) => {
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(password, salt);
-
-  return hashedPassword;
-};
+// ====================== Get Latest User's ID ========================
 
 const getUserId = async () => {
   const latestUser = await userDatabase.findOne().sort("-_id");
@@ -72,24 +74,33 @@ const getUserId = async () => {
   return latestUser._id;
 };
 
+// ========================= Register User ============================
+
 const register = async (user) => {
+  // Set new ID for User
   const newId = (await getUserId()) + 1;
+  // Hash User's Password with Bcrypt
   const newPassword = await hashPassword(user.password);
 
+  // Assign new ID and Password to User's Object
   const newUser = Object.assign(user, {
     _id: newId,
     password: newPassword,
   });
 
+  // Save User to Database
   await saveUser(newUser);
 };
+
+// ======================= Export All Functions =======================
 
 module.exports = {
   getAllUsers,
   register,
-  findProperty,
-  isValidPassword,
+  findUser,
   getUserById,
   addArticle,
   deleteArticleFromAuthor,
 };
+
+// ====================================================================

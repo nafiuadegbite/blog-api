@@ -1,3 +1,5 @@
+// ============= Reading Time Calculation =============
+
 const getReadingTime = (text) => {
   const wpm = 220;
   const words = text.trim().split(/\s+/).length;
@@ -10,4 +12,8 @@ const getReadingTime = (text) => {
   return `${time} minutes`;
 };
 
+// ====================================================
+
 module.exports = { getReadingTime };
+
+// ====================================================
