@@ -1,6 +1,8 @@
 const request = require("supertest");
+const { response } = require("../../app");
 const app = require("../../app");
 const { mongoConnect, mongoDisconnect } = require("../../services/mongo");
+const getTestToken = require("../../utils/getTestToken");
 
 describe("Article Route Test", () => {
   beforeAll(async () => {
@@ -70,29 +72,21 @@ describe("Article Route Test", () => {
   describe("GET /api/v1/blog/list", () => {
     let _token = null;
     beforeEach(async () => {
-      const response = await request(app)
-        .post("/api/v1/user/login")
-        .set("Content-Type", "application/json")
-        .send(userWithArticle);
-      _token = response.body.token;
+      _token = await getTestToken(request, app, userWithArticle);
     });
 
     test("It should return user's article list", async () => {
       const response = await request(app)
         .get("/api/v1/blog/list")
         .set("Authorization", "Bearer " + _token);
-      expect(200);
+      expect(response.statusCode).toBe(200);
     });
   });
 
   describe("GET /api/v1/blog/list", () => {
     let _token = null;
     beforeEach(async () => {
-      const response = await request(app)
-        .post("/api/v1/user/login")
-        .set("Content-Type", "application/json")
-        .send(userWithoutArticle);
-      _token = response.body.token;
+      _token = await getTestToken(request, app, userWithoutArticle);
     });
 
     test("It should catch if no article for user", async () => {
@@ -109,11 +103,7 @@ describe("Article Route Test", () => {
   describe("POST /api/v1/blog", () => {
     let _token = null;
     beforeEach(async () => {
-      const response = await request(app)
-        .post("/api/v1/user/login")
-        .set("Content-Type", "application/json")
-        .send(userWithArticle);
-      _token = response.body.token;
+      _token = await getTestToken(request, app, userWithArticle);
     });
 
     test("It should check if user is logged in", async () => {
@@ -128,8 +118,8 @@ describe("Article Route Test", () => {
       const response = await request(app)
         .post("/api/v1/blog")
         .send(articleData)
-        .set("Authorization", "Bearer " + _token)
-        .expect(201);
+        .set("Authorization", "Bearer " + _token);
+      expect(response.statusCode).toBe(201);
     });
 
     test("It should catch if article title already exist", async () => {
@@ -158,11 +148,7 @@ describe("Article Route Test", () => {
   describe("PUT /api/v1/blog/:id", () => {
     let _token = null;
     beforeEach(async () => {
-      const response = await request(app)
-        .post("/api/v1/user/login")
-        .set("Content-Type", "application/json")
-        .send(userWithArticle);
-      _token = response.body.token;
+      _token = await getTestToken(request, app, userWithArticle);
     });
 
     test("It should check if user is logged in", async () => {
@@ -217,11 +203,7 @@ describe("Article Route Test", () => {
   describe("DELETE /api/v1/blog/:id", () => {
     let _token = null;
     beforeEach(async () => {
-      const response = await request(app)
-        .post("/api/v1/user/login")
-        .set("Content-Type", "application/json")
-        .send(userWithArticle);
-      _token = response.body.token;
+      _token = await getTestToken(request, app, userWithArticle);
     });
 
     test("It should check if user is logged in", async () => {

@@ -1,6 +1,7 @@
 const request = require("supertest");
 const app = require("../../app");
 const { mongoConnect, mongoDisconnect } = require("../../services/mongo");
+const getTestToken = require("../../utils/getTestToken");
 
 describe("User Route Test", () => {
   beforeAll(async () => {
@@ -62,11 +63,7 @@ describe("User Route Test", () => {
   describe("GET /api/v1/user/profile", () => {
     let _token = null;
     beforeEach(async () => {
-      const response = await request(app)
-        .post("/api/v1/user/login")
-        .set("Content-Type", "application/json")
-        .send(userWithArticle);
-      _token = response.body.token;
+      _token = await getTestToken(request, app, userWithArticle);
     });
 
     test("It should check if user is logged in", async () => {
@@ -81,7 +78,7 @@ describe("User Route Test", () => {
       const response = await request(app)
         .get("/api/v1/user/profile")
         .set("Authorization", "Bearer " + _token);
-      expect(200);
+      expect(response.statusCode).toBe(200);
     });
   });
 });
