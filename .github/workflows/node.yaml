@@ -11,8 +11,8 @@ jobs:
       MONGO_URL: ${{ secrets.MONGO_URL }}
     strategy:
       matrix:
-        node-version: [16.x, 17.x, 18.x]
-        mongodb-version: ["4.4"]
+        node-version: [17.x, 18.x]
+        mongodb-version: [5.x, 6.x]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

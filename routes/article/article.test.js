@@ -11,11 +11,6 @@ describe("Article Route Test", () => {
     await mongoDisconnect();
   });
 
-  const invalidUser = {
-    email: "john@gmail.com",
-    password: "192891",
-  };
-
   const userWithArticle = {
     email: "ade@gmail.com",
     password: "123456",
@@ -48,6 +43,8 @@ describe("Article Route Test", () => {
   const updateData = {
     state: "published",
   };
+
+  const randomInt = Math.floor(Math.random() * (27 - 12) + 12);
 
   describe("GET /api/v1/blog", () => {
     test("It should return all published articles", async () => {
@@ -178,7 +175,7 @@ describe("Article Route Test", () => {
 
     test("It should update article", async () => {
       const response = await request(app)
-        .put("/api/v1/blog/14")
+        .put(`/api/v1/blog/${randomInt}`)
         .send(updateData)
         .set("Authorization", "Bearer " + _token);
       expect(201);
