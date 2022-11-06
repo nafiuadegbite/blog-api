@@ -1,14 +1,13 @@
-
 # Blog RESTful API
 
 > This is a simple blogging service provide **REST API** for consumer to build their own blogging platform on demand.
 
 ## Features
 
-- Authentication with JWT
-- User Create, Read, Update and Delete (CRUD) operations
-- CRUD operations for blog post
-- Pagination and search where necessary
+*   Authentication with JWT
+*   User Create, Read, Update and Delete (CRUD) operations
+*   CRUD operations for blog post
+*   Pagination and search where necessary
 
 ## API Documentation
 
@@ -17,14 +16,14 @@ Extensive and testing documentation with postman: [Blog API](https://documenter.
 
 ## Requirements
 
-- NodeJS
-- MongoDB
+*   NodeJS
+*   MongoDB
 
 ## Configuration File
 
-Modify the config/.env file to your environment variables, and set your JWT_SECRET.
+Modify the config/.env file to your environment variables, and set your JWT\_SECRET.
 
-``` ENV
+```ENV
 PORT=8000
 MONGO_URL=YOUR_URL
 JWT_SECRET=YOUR_SECRET
@@ -37,14 +36,14 @@ JWT_COOKIE_EXPIRE=1
 
 Install all dependencies
 
-``` console
+```console
 npm install
 
 ```
 
 ## Start Server
 
-``` console
+```console
 npm start
 
 ```
@@ -97,7 +96,7 @@ npm start
       - [I. Example Response: Update User's Detail](#i-example-response-update-users-detail)
   - [Coded by Nafiu Adegbite](#coded-by-nafiu-adegbite)
 
---------
+***
 
 ## Blog
 
@@ -119,8 +118,8 @@ Fetch all the published articles from the database with pagination also you can 
 | ?title=hello | Search the published articles where title equals hello (title and the value can be anything in the collection) |
 | ?authorName=Nafiu | Search the published articles where author name equals Nafiu |
 | ?tags=love | Search the published articles where tag equals love |
-| ?sort=-read_count | Get data in descending order using that field |
-| ?sort=read_count | Get data in ascending order using that field |
+| ?sort=-read\_count | Get data in descending order using that field |
+| ?sort=read\_count | Get data in ascending order using that field |
 
 ***Endpoint:***
 
@@ -580,7 +579,8 @@ URL: localhost:8000/api/v1/user/updatedetails
 
 Reach me on twitter [@AdegbiteNafiu](https://www.twitter.com/AdegbiteNafiu)
 
---------
+***
+
 [Back to top](#blog-restful-api)
 
->Generated at 2022-11-06 00:35:49 by [docgen](https://github.com/thedevsaddam/docgen)
+> Generated at 2022-11-06 00:35:49 by [docgen](https://github.com/thedevsaddam/docgen)

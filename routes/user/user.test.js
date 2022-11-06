@@ -23,10 +23,10 @@ describe("User Route Test", () => {
     password: "192891",
   };
 
-  const userData = {
-    email: "naf@hotmail.com",
-    password: "456789",
-  };
+  // const userData = {
+  //   email: "naf@hotmail.com",
+  //   password: "456789",
+  // };
 
   describe("POST /api/v1/user/login", () => {
     // beforeEach(async () => {
