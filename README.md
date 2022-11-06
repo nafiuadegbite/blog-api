@@ -14,6 +14,7 @@
 ## API Documentation
 
 Hosted on vercel: [Blog API](https://blog-api-flax.vercel.app/)
+
 Extensive and testing documentation with postman: [Blog API](https://documenter.getpostman.com/view/12586388/2s8YYFt4dh)
 
 ## Requirements
