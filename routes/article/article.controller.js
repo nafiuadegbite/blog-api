@@ -28,7 +28,7 @@ const httpGetAllArticles = async (req, res) => {
     let query = req.query;
 
     // Destructuring GET request object
-    let { page, skip, limit, sort, endIndex, select } = getPagination(query);
+    let { page, skip, limit, sort, endIndex } = getPagination(query);
 
     let articles = await getAllArticles(query, skip, limit, sort);
 

@@ -217,8 +217,6 @@ URL: localhost:8000/api/v1/blog
 
 ***Status Code:*** 200
 
-<br>
-
 ### 2. Get Single Published Article
 
 Fetch single published articles from the database with an id
@@ -263,8 +261,6 @@ URL:
 ```
 
 ***Status Code:*** 200
-
-<br>
 
 ### 3. Create Article
 
@@ -317,8 +313,6 @@ URL: localhost:8000/api/v1/blog
 
 ***Status Code:*** 201
 
-<br>
-
 ### 4. Update Article
 
 Modify article in the database using article ID.
@@ -361,8 +355,6 @@ URL: localhost:8000/api/v1/blog/12
 
 ***Status Code:*** 201
 
-<br>
-
 ### 5. Delete Article
 
 Delete article from the database using article ID.
@@ -390,8 +382,6 @@ URL:
 ```
 
 ***Status Code:*** 200
-
-<br>
 
 ## Users
 
@@ -444,8 +434,6 @@ URL: localhost:8000/api/v1/user/register
 
 ***Status Code:*** 201
 
-<br>
-
 ### 2. Login User
 
 ***Endpoint:***
@@ -489,8 +477,6 @@ URL: localhost:8000/api/v1/user/login
 
 ***Status Code:*** 200
 
-<br>
-
 ### 3. Profile
 
 ***Endpoint:***
@@ -528,8 +514,6 @@ URL: localhost:8000/api/v1/user/profile
 
 ***Status Code:*** 200
 
-<br>
-
 ### 4. Logout
 
 Clear token cookie
@@ -557,8 +541,6 @@ URL:
 ```
 
 ***Status Code:*** 200
-
-<br>
 
 ### 5. Update User's Detail
 
@@ -594,13 +576,11 @@ URL: localhost:8000/api/v1/user/updatedetails
 
 ***Status Code:*** 201
 
-<br>
-
 ## Coded by Nafiu Adegbite
 
 Reach me on twitter [@AdegbiteNafiu](https://www.twitter.com/AdegbiteNafiu)
 
----
+--------
 [Back to top](#blog-restful-api)
 
 >Generated at 2022-11-06 00:35:49 by [docgen](https://github.com/thedevsaddam/docgen)

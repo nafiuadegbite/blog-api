@@ -105,7 +105,7 @@ module.exports = {
   getUserById,
   addArticle,
   deleteArticleFromAuthor,
-  updateUser
+  updateUser,
 };
 
 // ====================================================================

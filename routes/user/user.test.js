@@ -11,12 +11,12 @@ describe("User Route Test", () => {
     await mongoDisconnect();
   });
 
-  const regUser = {
-    email: "naf@hotmail.com",
-    first_name: "Nafiu",
-    last_name: "Adegbite",
-    password: "456789",
-  };
+  // const regUser = {
+  //   email: "naf@hotmail.com",
+  //   first_name: "Nafiu",
+  //   last_name: "Adegbite",
+  //   password: "456789",
+  // };
 
   const invalidUser = {
     email: "john@gmail.com",
