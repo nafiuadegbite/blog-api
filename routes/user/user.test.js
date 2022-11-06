@@ -66,7 +66,7 @@ describe("User Route Test", () => {
       _token = await getTestToken(request, app, userWithArticle);
     });
 
-    test("It should check if user is logged in", async () => {
+    test("It should check if user is authorized to view profile", async () => {
       const response = await request(app).get("/api/v1/user/profile");
       expect(401);
       expect(response.body).toStrictEqual({

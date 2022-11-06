@@ -1,5 +1,4 @@
 const request = require("supertest");
-const { response } = require("../../app");
 const app = require("../../app");
 const { mongoConnect, mongoDisconnect } = require("../../services/mongo");
 const getTestToken = require("../../utils/getTestToken");
@@ -51,7 +50,7 @@ describe("Article Route Test", () => {
   describe("GET /api/v1/blog", () => {
     test("It should return all published articles", async () => {
       const response = await request(app).get("/api/v1/blog");
-      expect(200);
+      expect(response.statusCode).toBe(200);
     });
   });
 
@@ -106,7 +105,7 @@ describe("Article Route Test", () => {
       _token = await getTestToken(request, app, userWithArticle);
     });
 
-    test("It should check if user is logged in", async () => {
+    test("It should check if user is authorized", async () => {
       const response = await request(app).post("/api/v1/blog");
       expect(401);
       expect(response.body).toStrictEqual({
@@ -151,7 +150,7 @@ describe("Article Route Test", () => {
       _token = await getTestToken(request, app, userWithArticle);
     });
 
-    test("It should check if user is logged in", async () => {
+    test("It should check if user is authorized to update article", async () => {
       const response = await request(app).put("/api/v1/blog/14");
       expect(401);
       expect(response.body).toStrictEqual({
@@ -206,7 +205,7 @@ describe("Article Route Test", () => {
       _token = await getTestToken(request, app, userWithArticle);
     });
 
-    test("It should check if user is logged in", async () => {
+    test("It should check if user is authorized to delete article", async () => {
       const response = await request(app).delete("/api/v1/blog/11");
       expect(401);
       expect(response.body).toStrictEqual({
