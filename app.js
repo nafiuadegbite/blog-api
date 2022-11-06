@@ -1,5 +1,6 @@
 // =================== Blog App =======================
 
+const path = require("path");
 const express = require("express");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
@@ -21,6 +22,7 @@ app.use(cookieParser());
 
 // ====================================================
 
+app.use(express.static(path.join(__dirname, "public")));
 app.use("/api/v1", api);
 
 // ====================================================
