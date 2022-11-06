@@ -11,21 +11,35 @@ describe("User Route Test", () => {
     await mongoDisconnect();
   });
 
+  const regUser = {
+    email: "naf@hotmail.com",
+    first_name: "Nafiu",
+    last_name: "Adegbite",
+    password: "456789",
+  };
+
   const invalidUser = {
     email: "john@gmail.com",
     password: "192891",
   };
 
-  const userWithArticle = {
-    email: "ade@gmail.com",
-    password: "123456",
+  const userData = {
+    email: "naf@hotmail.com",
+    password: "456789",
   };
 
   describe("POST /api/v1/user/login", () => {
+    beforeAll(async () => {
+      const response = await request(app)
+        .post("/api/v1/user/register")
+        .set("Content-Type", "application/json")
+        .send(regUser);
+    });
+
     test("It should check if logged in successful", async () => {
       const response = await request(app)
         .post("/api/v1/user/login")
-        .send(userWithArticle);
+        .send(userData);
       expect(200);
       expect(response.body.success).toBe("true");
     });
@@ -56,32 +70,6 @@ describe("User Route Test", () => {
         .send(invalidUser);
       expect(401);
       expect(response.body).toStrictEqual({ message: "Invalid Credentials" });
-    });
-  });
-
-  describe("GET /api/v1/user/profile", () => {
-    let _token = null;
-    beforeEach(async () => {
-      const response = await request(app)
-        .post("/api/v1/user/login")
-        .set("Content-Type", "application/json")
-        .send(userWithArticle);
-      _token = response.body.token;
-    });
-
-    test("It should check if user is logged in", async () => {
-      const response = await request(app).get("/api/v1/user/profile");
-      expect(401);
-      expect(response.body).toStrictEqual({
-        message: "Unauthorized",
-      });
-    });
-
-    test("It should return user's profile", async () => {
-      const response = await request(app)
-        .get("/api/v1/user/profile")
-        .set("Authorization", "Bearer " + _token);
-      expect(200);
     });
   });
 });
