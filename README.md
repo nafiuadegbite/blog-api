@@ -1,13 +1,15 @@
 # Blog RESTful API
 
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/3309be1bea7c46c6abc5a467ec86381e)](https://www.codacy.com/gh/nafiuadegbite/blog-api/dashboard?utm_source=github.com\&utm_medium=referral\&utm_content=nafiuadegbite/blog-api\&utm_campaign=Badge_Grade)
+
 > This is a simple blogging service provide **REST API** for consumer to build their own blogging platform on demand.
 
 ## Features
 
-*   Authentication with JWT
-*   User Create, Read, Update and Delete (CRUD) operations
-*   CRUD operations for blog post
-*   Pagination and search where necessary
+* Authentication with JWT
+* User Create, Read, Update and Delete (CRUD) operations
+* CRUD operations for blog post
+* Pagination and search where necessary
 
 ## API Documentation
 
@@ -16,8 +18,8 @@ Extensive and testing documentation with postman: [Blog API](https://documenter.
 
 ## Requirements
 
-*   NodeJS
-*   MongoDB
+* NodeJS
+* MongoDB
 
 ## Configuration File
 
