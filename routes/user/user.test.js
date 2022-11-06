@@ -29,20 +29,20 @@ describe("User Route Test", () => {
   };
 
   describe("POST /api/v1/user/login", () => {
-    beforeEach(async () => {
-      const response = await request(app)
-        .post("/api/v1/user/register")
-        .set("Content-Type", "application/json")
-        .send(regUser);
-    });
+    // beforeEach(async () => {
+    //   const response = await request(app)
+    //     .post("/api/v1/user/register")
+    //     .set("Content-Type", "application/json")
+    //     .send(regUser);
+    // });
 
-    test("It should check if logged in successful", async () => {
-      const response = await request(app)
-        .post("/api/v1/user/login")
-        .send(userData);
-      expect(200);
-      expect(response.body.success).toBe("true");
-    });
+    // test("It should check if logged in successful", async () => {
+    //   const response = await request(app)
+    //     .post("/api/v1/user/login")
+    //     .send(userData);
+    //   expect(200);
+    //   expect(response.body.success).toBe("true");
+    // });
 
     test("It should catch missing required properties", async () => {
       const response = await request(app)
