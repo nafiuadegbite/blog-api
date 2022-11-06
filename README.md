@@ -1,5 +1,7 @@
 # Blog RESTful API
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/5af6821e713544eea8fed5be044ff656)](https://app.codacy.com/gh/nafiuadegbite/blog-api?utm_source=github.com&utm_medium=referral&utm_content=nafiuadegbite/blog-api&utm_campaign=Badge_Grade_Settings)
+
 > This is a simple blogging service provide **REST API** for consumer to build their own blogging platform on demand.
 
 ## Features
