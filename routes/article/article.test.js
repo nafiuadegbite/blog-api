@@ -19,12 +19,6 @@ describe("Article Route Test", () => {
   });
 
   describe("GET /api/v1/blog/:id", () => {
-    test("It should return a published articles", async () => {
-      const response = await request(app).get("/api/v1/blog/1");
-      expect(200);
-      expect(response.body._id).toBe(1);
-    });
-
     test("It should catch if article not found", async () => {
       const response = await request(app).get("/api/v1/blog/2000");
       expect(404);

@@ -29,7 +29,7 @@ describe("User Route Test", () => {
   };
 
   describe("POST /api/v1/user/login", () => {
-    beforeAll(async () => {
+    beforeEach(async () => {
       const response = await request(app)
         .post("/api/v1/user/register")
         .set("Content-Type", "application/json")
