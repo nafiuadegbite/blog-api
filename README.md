@@ -10,11 +10,11 @@
 * User Create, Read, Update and Delete (CRUD) operations
 * CRUD operations for blog post
 * Pagination and search where necessary
+* API Security (NoSQL Injections, XSS Attacks, http param pollution etc)
 
 ## API Documentation
 
-Hosted on vercel: [Blog API](https://blog-api-flax.vercel.app/)
-
+Hosted on vercel: [Blog API](https://blog-api-flax.vercel.app/)\
 Extensive and testing documentation with postman: [Blog API](https://documenter.getpostman.com/view/12586388/2s8YYFt4dh)
 
 ## Requirements
@@ -26,7 +26,7 @@ Extensive and testing documentation with postman: [Blog API](https://documenter.
 
 Modify the config/.env file to your environment variables, and set your JWT\_SECRET.
 
-```ENV
+```plaintext
 PORT=8000
 MONGO_URL=YOUR_URL
 JWT_SECRET=YOUR_SECRET
@@ -39,14 +39,14 @@ JWT_COOKIE_EXPIRE=1
 
 Install all dependencies
 
-```console
+```plaintext
 npm install
 
 ```
 
 ## Start Server
 
-```console
+```plaintext
 npm start
 
 ```
@@ -81,6 +81,9 @@ npm start
     - [5. Delete Article](#5-delete-article)
       - [I. Example Request: Delete Article](#i-example-request-delete-article)
       - [I. Example Response: Delete Article](#i-example-response-delete-article)
+    - [6. Article List Per User](#6-article-list-per-user)
+      - [I. Example Request: Article List Per User](#i-example-request-article-list-per-user)
+      - [I. Example Response: Article List Per User](#i-example-response-article-list-per-user)
   - [Users](#users)
     - [1. Register User](#1-register-user)
       - [I. Example Request: Register User](#i-example-request-register-user)
@@ -385,6 +388,134 @@ URL:
 
 ***Status Code:*** 200
 
+### 6. Article List Per User
+
+***Endpoint:***
+
+```bash
+Method: GET
+Type: 
+URL: localhost:8000/api/v1/blog/list
+```
+
+***Query params:***
+
+| Key | Value | Description |
+| --- | ------|-------------|
+| limit | 5 |  |
+
+***More example Requests/Responses:***
+
+#### I. Example Request: Article List Per User
+
+***Query:***
+
+| Key | Value | Description |
+| --- | ------|-------------|
+| limit | 5 |  |
+
+***Body: None***
+
+#### I. Example Response: Article List Per User
+
+```js
+{
+    "pagination": {
+        "next": {
+            "page": 2,
+            "limit": 5
+        }
+    },
+    "articleList": [
+        {
+            "_id": 9,
+            "__v": 0,
+            "author": 2,
+            "body": "Second post here",
+            "created_at": "2022-11-01T18:08:16.253Z",
+            "description": "Second",
+            "read_count": 7,
+            "state": "published",
+            "tags": [
+                "second",
+                "one"
+            ],
+            "title": "My tenth post",
+            "updated_at": "2022-11-01T22:18:14.555Z"
+        },
+        {
+            "_id": 10,
+            "__v": 0,
+            "author": 2,
+            "body": "Love all",
+            "created_at": "2022-11-02T13:16:52.275Z",
+            "description": "Second",
+            "read_count": 2,
+            "state": "published",
+            "tags": [
+                "second",
+                "one"
+            ],
+            "title": "Love",
+            "updated_at": "2022-11-04T05:44:32.901Z"
+        },
+        {
+            "_id": 12,
+            "__v": 0,
+            "author": 2,
+            "authorName": "Nafiu",
+            "body": "Love all Business demands continuous delivery of value. Value is created only when a product is delivered to a satisfied customer. It's not created when one silo in the process is completed. It demands that you reset focus from silos to an end-to-end flow of value. The core idea is to create a repeatable, reliable, and incrementally-improving process for taking software from concept to customer. The goal is to enable a constant flow of changes into production via an automated software production line. Think of it as a pipeline. The pipeline breaks down the software delivery process into stages. Each stage aims to verify the quality of new features from a different angle to validate the new functionality and prevent errors from affecting your users. The pipeline should provide feedback to the team. Also, visibility into the changes flows to everyone involved in delivering the new feature(s). A delivery pipeline enables the flow of more minor changes more frequently, with a focus on flow. Your teams can concentrate on optimizing the delivery of changes that bring quantifiable value to the business. This approach leads teams to continuously monitor and learn where they're finding obstacles, resolve those issues, and gradually improve the pipeline's flow. As the process continues, the feedback loop provides new insights into new issues and barriers to be resolved. The pipeline is the focus of your continuous improvement loop.",
+            "created_at": "2022-11-05T06:31:34.020Z",
+            "description": "Second",
+            "read_count": 18,
+            "reading_time": "2 minutes",
+            "state": "published",
+            "tags": [
+                "tech"
+            ],
+            "title": "Tech",
+            "updated_at": "2022-11-05T22:44:43.136Z"
+        },
+        {
+            "_id": 13,
+            "__v": 0,
+            "author": 2,
+            "authorName": "Nafiu",
+            "body": "Love all Business demands continuous delivery of value.",
+            "created_at": "2022-11-05T18:38:59.002Z",
+            "description": "Second",
+            "read_count": 2,
+            "reading_time": "1 minute",
+            "state": "published",
+            "tags": [
+                "tech"
+            ],
+            "title": "89753c",
+            "updated_at": "2022-11-06T05:15:13.875Z"
+        },
+        {
+            "_id": 14,
+            "__v": 0,
+            "author": 2,
+            "authorName": "Nafiu",
+            "body": "Love all Business demands continuous delivery of value.",
+            "created_at": "2022-11-05T18:45:27.260Z",
+            "description": "Second",
+            "read_count": 18,
+            "reading_time": "1 minute",
+            "state": "published",
+            "tags": [
+                "tech"
+            ],
+            "title": "2a2b42",
+            "updated_at": "2022-11-06T02:06:23.479Z"
+        }
+    ]
+}
+```
+
+***Status Code:*** 200
+
 ## Users
 
 ### 1. Register User
@@ -586,4 +717,4 @@ Reach me on twitter [@AdegbiteNafiu](https://www.twitter.com/AdegbiteNafiu)
 
 [Back to top](#blog-restful-api)
 
-> Generated at 2022-11-06 00:35:49 by [docgen](https://github.com/thedevsaddam/docgen)
+> Generated at 2022-11-07 13:23:02 by [docgen](https://github.com/thedevsaddam/docgen)
