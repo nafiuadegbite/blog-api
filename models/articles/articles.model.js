@@ -11,6 +11,7 @@ const getAllArticles = async (query, skip, limit, sort) => {
   return await articleDatabase
     .find(query, {
       __v: 0,
+      state: { $in: "published" }
     })
     .populate("author", { _id: 0, first_name: 1, last_name: 1 })
     .sort(sort)
